@@ -2,44 +2,39 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Contact; // This is the crucial link to your database
+use App\Models\Contact;
 use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource (Read All).
+     * Using paginate(10) instead of all() to improve performance.
      */
     public function index()
     {
-        // This will return all contacts in the database
-        return Contact::all();
+        return Contact::paginate(10);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created resource in storage (Create).
      */
     public function store(Request $request)
     {
-        // 1. Validate the incoming data
-        $validated = $request->validate([
-            'name'         => 'required|string|max:255',
-            'email'        => 'required|email|unique:contacts,email',
+        // Validation ensures the data is clean before saving
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:contacts,email',
             'phone_number' => 'required|string|max:20',
         ]);
 
-        // 2. Save the data to the MySQL table
-        $contact = Contact::create($validated);
+        $contact = Contact::create($validatedData);
 
-        // 3. Send back a success response
-        return response()->json([
-            'message' => 'Contact saved successfully!',
-            'contact' => $contact
-        ], 201);
+        return response()->json($contact, 201);
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified resource (Read One).
      */
     public function show(Contact $contact)
     {
@@ -47,33 +42,28 @@ class ContactController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource in storage (Update).
      */
     public function update(Request $request, Contact $contact)
     {
-        $validated = $request->validate([
-            'name'         => 'sometimes|string|max:255',
-            'email'        => 'sometimes|email|unique:contacts,email,' . $contact->id,
-            'phone_number' => 'sometimes|string|max:20',
+        $validatedData = $request->validate([
+            'name' => 'sometimes|required|string|max:255',
+            'email' => 'sometimes|required|email|unique:contacts,email,' . $contact->id,
+            'phone_number' => 'sometimes|required|string|max:20',
         ]);
 
-        $contact->update($validated);
+        $contact->update($validatedData);
 
-        return response()->json([
-            'message' => 'Contact updated successfully!',
-            'contact' => $contact
-        ]);
+        return response()->json($contact, 200);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified resource from storage (Delete).
      */
     public function destroy(Contact $contact)
     {
         $contact->delete();
 
-        return response()->json([
-            'message' => 'Contact deleted successfully!'
-        ]);
+        return response()->json(['message' => 'Contact deleted successfully'], 200);
     }
 }

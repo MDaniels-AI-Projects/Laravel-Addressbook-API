@@ -93,6 +93,109 @@ Using **Thunder Client** with the `Accept: application/json` header, I performed
 
 ---
 
+## 🚀 Phase 2: Enterprise Scaling & Data Integrity
+Completed: 19th December 2025
+
+In this phase, I transitioned the project from a basic functional test to a production-ready API structure, focusing on how applications handle large datasets and user error.
+
+### Key Skills Demonstrated
+- Database Seeding & Factories: Automated the generation of 50+ realistic records using the Faker library to simulate a production environment.
+- Performance Optimisation (Pagination): Implemented chunked data loading (10 per page) to ensure the API remains fast as the database grows, reducing memory overhead.
+- Advanced Eloquent Traits: Utilised the HasFactory trait within Models to bridge logic between the application and database testing layers.
+- Server-Side Validation: Protected the MySQL database by enforcing strict rules on incoming data (unique emails, string lengths, and required fields).
+
+---
+
+## 🛠 Technical Implementation
+
+### 1. Automated Data Blueprint (Factories)
+I created a ContactFactory to simulate a real-world environment. This demonstrates an understanding of the Laravel ecosystem beyond simple manual CRUD.
+
+PHP Example:
+
+    public function definition(): array
+    {
+        return [
+            'name' => fake()->name(),
+            'email' => fake()->unique()->safeEmail(),
+            'phone_number' => fake()->phoneNumber(),
+        ];
+    }
+
+---
+
+### 2. Performance via Pagination
+To satisfy the Performance Optimisation requirement in industry standards, I replaced all() with paginate(10). This provides metadata (links and total count) to frontend consumers like Vue.js.
+
+Endpoint Example:
+
+    GET /api/contacts?page=2
+
+---
+
+### 3. Request Validation Logic
+Updated the ContactController to handle data integrity professionally. This ensures that no invalid or duplicate data enters the system.
+
+PHP Validation Example:
+
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:contacts,email',
+        'phone_number' => 'required|string|max:20',
+    ]);
+
+---
+
+## 🚦 How to Run & Test
+
+### Database Refresh & Seed
+To reset the environment and generate the 50 professional test entries in one command:
+
+    php artisan migrate:fresh --seed
+
+---
+
+### Testing in Thunder Client
+
+Retrieve paginated contacts:
+
+    GET http://127.0.0.1:8000/api/contacts
+
+Observe the JSON structure containing the data array and the meta and links objects.
+
+Retrieve page 3:
+
+    GET http://127.0.0.1:8000/api/contacts?page=3
+
+Verify that the API correctly retrieves the 3rd set of 10 unique records.
+
+---
+
+## 📂 Phase 1 Recap: Core Foundation
+
+Framework: Laravel 11 / PHP 8.4  
+Environment: Laravel Herd & MySQL  
+Architecture: MVC (Model-View-Controller)  
+API Pattern: RESTful CRUD (POST, GET, PUT, DELETE)  
+Tools: TablePlus, Thunder Client, Git, GitHub  
+
+---
+
+## 🛠 Troubleshooting Log
+
+Controller Conflict:
+Resolved a "Cannot redeclare class" error by correctly managing namespaces and file naming conventions.
+
+Model Traits:
+Fixed a BadMethodCallException by implementing the HasFactory trait in the Contact Model to enable automated seeding.
+
+---
+
+## 📈 Next Steps
+
+- [ ] Implement API Authentication using Laravel Sanctum to secure endpoints.
+- [ ] Create a Vue.js frontend to consume these paginated endpoints.
+
 ## 📚 Further Learning
 
 This project follows the official [Laravel Documentation](https://laravel.com/docs). For further skills development, I utilised [Laracasts](https://laracasts.com) to ensure the code follows modern PHP and Laravel standards.
