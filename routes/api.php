@@ -1,7 +1,13 @@
 <?php
 
-use App\Http\Controllers\ContactController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController; // Ensure this is here
 
-// This one line creates the URLs for Create, Read, Update, and Delete!
-Route::apiResource('contacts', ContactController::class);
+// This is the "Login" route you need to add
+Route::post('/login', [AuthController::class, 'login']);
+
+// This is the "Protected" route to test if the token works
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});

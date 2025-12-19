@@ -196,6 +196,63 @@ Fixed a BadMethodCallException by implementing the HasFactory trait in the Conta
 - [ ] Implement API Authentication using Laravel Sanctum to secure endpoints.
 - [ ] Create a Vue.js frontend to consume these paginated endpoints.
 
+## Phase 3: Addition of Secure Token-Based Authentication using Laravel Sanctum/Passport
+
+# Laravel Address Book API
+
+A modern, secure RESTful API built with **Laravel 11**, designed to demonstrate real-world backend development, authentication, and debugging practices.
+
+---
+
+## 🚀 Purpose & Benefits
+
+The core objective of this project was to design and implement **secure token-based authentication** using **Laravel Sanctum**, following industry best practices for API development.
+
+### Why Token-Based Authentication?
+
+In modern applications, APIs are rarely consumed by just one website. They often serve:
+- Single Page Applications (React, Vue)
+- Mobile apps (iOS / Android)
+- Third-party services
+
+Token-based authentication solves the scalability and security limitations of traditional session-based logins.
+
+Instead of storing user sessions on the server, the API issues a **Bearer Token** after login. This token acts as a secure “key” that the client presents with every request.
+
+---
+
+## 🔐 Benefits of Token-Based Authentication
+
+### 1. Statelessness (Scalable by Design)
+
+Traditional session-based authentication requires the server to *remember* users by storing session data.
+
+**The Problem:**  
+As an application grows and runs on multiple servers, all servers must share session storage, which increases complexity and slows performance.
+
+**The Token Advantage:**  
+With token authentication, the server does not store session data. Each request contains everything needed to verify the user.  
+This allows:
+- Horizontal scaling
+- Load balancing
+- Microservice architectures
+
+Any server can handle any request independently.
+
+---
+
+### 2. Cross-Domain & Mobile Compatibility
+
+Cookies are tightly coupled to browser behavior and domain rules.
+
+**The Problem:**  
+APIs hosted on one domain and frontends on another often face CORS and cookie restrictions — especially on mobile apps.
+
+**The Token Advantage:**  
+Tokens are sent via HTTP headers:
+
+
+
 ## 📚 Further Learning
 
 This project follows the official [Laravel Documentation](https://laravel.com/docs). For further skills development, I utilised [Laracasts](https://laracasts.com) to ensure the code follows modern PHP and Laravel standards.
